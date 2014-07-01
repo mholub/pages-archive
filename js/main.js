@@ -49,6 +49,7 @@ function init() {
     controls.rollSpeed = 0.2;
     
     scene = new THREE.Scene();
+    scene.fog = new THREE.Fog( 0xffe300, 2, 5 );
 
     scene.add(cameraParent);
 
@@ -65,9 +66,10 @@ function init() {
     squareShape.lineTo( sqLength/2, -sqLength/2 );
     squareShape.lineTo( -sqLength/2, -sqLength/2 );
 
+    var k = 5;
     for (var i = 0; i < 100; i++) {
-        var x = THREE.Math.randFloat(-10, 10);
-        var y = THREE.Math.randFloat(-10, 10);
+        var x = THREE.Math.randFloat(-k, k);
+        var y = THREE.Math.randFloat(-k, k);
         var z = THREE.Math.randFloat(-5, 0);
         var s = THREE.Math.randFloat(0, 0.2);
         var d = THREE.Math.randFloat(0.1, 2);
