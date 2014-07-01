@@ -30,10 +30,14 @@ function init() {
     renderer.setClearColor(0xffe300, 1);
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
+    renderer.domElement.style.position = 'absolute';
+    renderer.domElement.style.top = '0px';
+    renderer.domElement.style.left = '0px';
 
     stats = new Stats();
     stats.domElement.style.position = 'absolute';
-    stats.domElement.style.bottom = '0px';
+    stats.domElement.style.top = '0px';
+    stats.domElement.style.left = '0px';
     stats.domElement.style.zIndex = 100;
     document.body.appendChild(stats.domElement);
 
@@ -71,10 +75,17 @@ function init() {
         var x = THREE.Math.randFloat(-k, k);
         var y = THREE.Math.randFloat(-k, k);
         var z = THREE.Math.randFloat(-5, 0);
-        var s = THREE.Math.randFloat(0, 0.2);
-        var d = THREE.Math.randFloat(0.1, 2);
+        var sx = THREE.Math.randFloat(0, 0.2);
+        var sy = sx + THREE.Math.randFloat(0, 0.2);
+        var ss = THREE.Math.randFloat(0, 1);
+        var d = THREE.Math.randFloat(0.05, 0.2);
+        var flat = THREE.Math.randFloat(0, 1) > 0.3;
 
-        addShape( squareShape, 0x000000, x, y, z, 0, 0, 0, s, d );
+        if (ss > 0.8) {
+            addShape( squareShape, 0x000000, x, y, z, 0, 0, 0, sx, sy, d, flat );
+        } else {
+            addShape( squareShape, 0x000000, x, y, z, 0, 0, 0, sx, sx, d, flat );
+        }
     }
 }
 
@@ -87,32 +98,37 @@ function limitControls(target) {
     if (Math.abs(target.rotation.x) > l) {
         target.rotation.x = k * target.rotation.x + (1 - k) * THREE.Math.sign(target.rotation.x) * l;
     }
+
     if (Math.abs(target.rotation.y) > l) {
         target.rotation.y = k * target.rotation.y + (1 - k) * THREE.Math.sign(target.rotation.y) * l;
     }
-    // target.rotation.x = THREE.Math.clamp(target.rotation.x, -l, l);
-    // target.rotation.y = THREE.Math.clamp(target.rotation.y, -l, l);
+
+    target.rotation.x = THREE.Math.clamp(target.rotation.x, -5 * l, 5 * l);
+    target.rotation.y = THREE.Math.clamp(target.rotation.y, -5 * l, 5 * l);
 }
 
-function addShape( shape, color, x, y, z, rx, ry, rz, s, d ) {
+function addShape( shape, color, x, y, z, rx, ry, rz, sx, sy, d, flat ) {
     var points = shape.createPointsGeometry();
 
     // flat shape
 
-    var geometry = new THREE.ShapeGeometry( shape );
+    if (flat) {
+        var geometry = new THREE.ShapeGeometry( shape );
 
-    var mesh = THREE.SceneUtils.createMultiMaterialObject( geometry, [ new THREE.MeshLambertMaterial( { color: color } ), new THREE.MeshBasicMaterial( { color: 0x000000, wireframe: true, transparent: true } ) ] );
-    mesh.position.set( x, y, z );
-    mesh.rotation.set( rx, ry, rz );
-    mesh.scale.set( s, s, s );
-    group.add( mesh );
+        var mesh = THREE.SceneUtils.createMultiMaterialObject( geometry, [ new THREE.MeshLambertMaterial( { color: color } ) ] );
+        mesh.position.set( x, y, z );
+        mesh.rotation.set( rx, ry, rz );
+        mesh.scale.set( sx, sy, 1 );
+        group.add( mesh );
+    }
+    
 
     // solid line
 
     var line = new THREE.Line( points, new THREE.LineBasicMaterial( { color: color, linewidth: 2 } ) );
     line.position.set( x, y, z - d );
     line.rotation.set( rx, ry, rz );
-    line.scale.set( s, s, s );
+    line.scale.set( sx, sy, 1 );
     group.add( line );
 }
 
