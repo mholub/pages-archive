@@ -11,11 +11,17 @@ require({
      'other/OBJLoader': {
         deps: ['vendor/three'],
         exports: 'THREE' },
+    'other/ColladaLoader': {
+        deps: ['vendor/three'],
+        exports: 'THREE' },
  }
 }, [
     'vendor/three', 'vendor/threex.windowresize', 'vendor/stats', 'vendor/FlyControls',
-    'other/OBJLoader'
+    'other/OBJLoader', 'other/ColladaLoader'
 ], function(THREE, THREEx, Stats) {
+
+var textures = {};
+var skills = [];
 
 var scene, renderer;
 var winResize, controls, stats;
@@ -33,8 +39,25 @@ var raycaster = new THREE.Raycaster();
 // other
 var clock = new THREE.Clock();
 
-init();
+preloadAssets();
 animate();
+
+function preloadAssets() {
+    var openGLTex = THREE.ImageUtils.loadTexture( 'images/opengl.png', THREE.UVMapping, function() {
+    } );
+    openGLTex.magFilter = THREE.NearestFilter;
+    openGLTex.minFilter = THREE.NearestFilter;
+    openGLTex.generateMipmaps = false;
+    textures.opengl = openGLTex;
+
+    var openGLTex2 = THREE.ImageUtils.loadTexture( 'images/opengl2.png', THREE.UVMapping, function() {
+    } );
+    openGLTex2.magFilter = THREE.NearestFilter;
+    openGLTex2.minFilter = THREE.NearestFilter;
+    openGLTex2.generateMipmaps = false;
+    textures.opengl2 = openGLTex2;
+    init();
+}
 
 function init() {
     renderer = new THREE.WebGLRenderer( {
@@ -70,11 +93,168 @@ function init() {
 
     initUI();
     initHeader();
+    initSkills();
 
     controls = new THREE.FlyControls( group, renderer.domElement );
     controls.movementSpeed = 0;
     controls.rollSpeed = -0.2;
 
+    initAmbientShapes();
+
+    document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+    document.addEventListener( 'click', onDocumentClick, false );
+}
+
+function onDocumentMouseMove( event ) {
+    event.preventDefault();
+
+    mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+    mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+}
+
+function onDocumentClick( event ) {
+    event.preventDefault();
+
+    checkInteraction(function(obj) {
+        console.log('click', obj);
+        if (obj.name === 'logo') {
+            //document.location.href = 'http://interactivelab.ru';
+            blowSkill(skills[0]);
+            blowSkill(skills[1]);
+            blowSkill(skills[2]);
+        }
+    });
+}
+
+function initHeader() {
+    header = new THREE.Object3D();
+    header.name = 'header';
+    header.position.y = 0.6;
+    header.position.z = 0.5;
+    header.scale.set(0.0007, 0.0007, 0.0007);
+    uiGroup.add( header );
+
+    var loader = new THREE.JSONLoader();
+    loader.load( 'models/header2.js', function ( geometry ) {
+        var piece = new THREE.Line(geometry, new THREE.LineBasicMaterial( {color: 0x000000, linewidth: 2, wireframe: true } ), THREE.LineStrip);
+        header.add(piece);
+        console.log('header loaded');
+    } );
+}
+
+function initSkills() {
+    var loader = new THREE.ColladaLoader();
+    loader.load( 'models/grid.dae', function ( collada ) {
+        skills = [];
+
+        var gridObj = collada.scene.children[0];
+        gridObj.position.z = 0.5;
+
+        gridObj.rotation.x = Math.PI/2;
+        gridObj.rotation.y = Math.PI/2;
+
+        var k = 0.03;
+        gridObj.scale.set(k, k, k);
+
+        console.log(gridObj);
+
+        for (var i = 0; i < 3; i++) {
+            var cs = gridObj.clone();
+            cs.userData.alive = false;
+
+            var mat = new THREE.MeshBasicMaterial( { color: new THREE.Color().setHSL(THREE.Math.randFloat(0, 1), 1, 0.5), transparent: true } );
+             //mat.color = 0x000000;
+            console.log(mat);
+            mat.map = THREE.Math.randFloat(0, 1) > 0.5 ? textures.opengl : textures.opengl;
+            cs.userData.sharedMaterial = mat;
+            setSkillMaterial(cs, mat);
+            cs.position.x = -1 + i * 1;
+            cs.position.z = 0.5 + 0.0001 * i; // avoid z-fighting
+            skills.push(cs);
+            uiGroup.add(cs);
+
+            for (var l = cs.children.length - 1; l >= 0; l--) {
+                var c = cs.children[l];
+                c.userData.origPos = c.position.clone();
+                c.userData.acceleration = new THREE.Vector3();
+                c.userData.velocity = new THREE.Vector3();
+            }
+        }
+    } );
+}
+
+function updateSkills(delta) {
+    for (var i = skills.length - 1; i >= 0; i--) {
+        var skill = skills[i];
+        var reallyAlive = false;
+        var readyToSwap = 0;
+        if (skill.userData.alive) {
+           // skill.userData.sharedMaterial.opacity -= 0.05;          
+            for (var l = skill.children.length - 1; l >= 0; l--) {
+                var p = skill.children[l];
+
+                    reallyAlive = true;
+                    p.userData.velocity.add(p.userData.acceleration.clone().multiplyScalar(delta));
+                    //p.userData.velocity.multiplyScalar(0.95);
+                    p.position.add(p.userData.velocity.clone().multiplyScalar(delta));
+
+                    if (p.position.distanceTo(p.userData.origPos) > 30) {
+                        //p.userData.velocity.set(0, 0, 0);
+                        readyToSwap+=1;
+
+                        p.userData.acceleration.set(0, 0, 0);
+                    }
+                    if (p.userData.acceleration.lengthSq() < 1) {
+                        p.userData.velocity.multiplyScalar(0.8);
+                        if (p.userData.velocity.lengthSq() < 0.001) {
+                            p.position.lerp(p.userData.origPos, 0.2);
+                        }
+                    }
+                             
+            }
+            // if (readyToSwap > 200 && skill.userData.state === 'blowStart') {
+            //     skill.userData.state = 'blowSwap';        
+            //     skill.userData.sharedMaterial.map = 
+            //       skill.userData.sharedMaterial.map === textures.opengl ? textures.opengl2 : textures.opengl;
+            // } else if (skill.userData.state === 'blowSwap') {
+            //     skill.userData.sharedMaterial.opacity += 0.1;          
+            // }
+            if (!reallyAlive) {
+               // console.log('Turn off alive', skill);
+                //skill.userData.alive = false;
+            }
+        }
+    }
+}
+
+function blowSkill(skill) {
+    skill.userData.alive = true;
+    skill.userData.state = 'blowStart';
+    for (var l = skill.children.length - 1; l >= 0; l--) {
+        var p = skill.children[l];
+        var v = new THREE.Vector3( THREE.Math.randFloatSpread(50), 0, THREE.Math.randFloatSpread(50) )
+        .normalize();
+        v.multiplyScalar(THREE.Math.randFloat(40, 50));
+        v.y = THREE.Math.randFloatSpread(30);
+        p.userData.velocity = v.clone();
+        p.userData.acceleration = v.clone();
+        // setTimeout(function() {
+        //     console.log('Fire', p);
+            
+        // }, l * 10);
+    }
+    console.log('Blow: ', skill);
+}
+
+function setSkillMaterial(skill, mat) {
+    skill.traverse(function(obj) {
+        if (obj instanceof THREE.Mesh) {
+            obj.material = mat;
+        }
+    });
+}
+
+function initAmbientShapes() {
     var sqLength = 1;
 
     var squareShape = new THREE.Shape();
@@ -101,44 +281,6 @@ function init() {
             addShape( squareShape, 0x000000, x, y, z, 0, 0, 0, sx, sx, d, flat );
         }
     }
-    document.addEventListener( 'mousemove', onDocumentMouseMove, false );
-    document.addEventListener( 'click', onDocumentClick, false );
-}
-
-function onDocumentMouseMove( event ) {
-    event.preventDefault();
-
-    mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-    mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
-}
-
-function onDocumentClick( event ) {
-    event.preventDefault();
-
-    checkInteraction(function(obj) {
-        console.log('click', obj);
-    });
-}
-
-function initHeader() {
-    var loader = new THREE.OBJLoader();
-    loader.load( 'models/header.obj', function ( object ) {
-        console.log(object);
-
-        var geometry = object.children[0].geometry;
-        THREE.GeometryUtils.center( geometry );
-
-        //geometry = new THREE.BoxGeometry(1000, 1000, 1000);
-        header = new THREE.Line(geometry, new THREE.LineBasicMaterial( {color: 0x000000, linewidth: 2 } ), THREE.LineStrip);
-        //header = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial( {color: 0x000000, wireframe: false } ));
-        header.name = 'header';
-        console.log('header loaded');
-        console.log(header);
-        uiGroup.add( header );
-        header.position.y = 0.6;
-        header.position.z = 0.5;
-        header.scale.set(0.0007, 0.0007, 0.0007);
-    } );
 }
 
 function initLogo() {
@@ -231,8 +373,10 @@ function checkInteraction(callback, noCallback) {
 
 function animate() {
     stats.begin();
-
     var delta = clock.getDelta();
+
+    updateSkills(delta);
+
     requestAnimationFrame(animate);
 
     // mesh.rotation.x += 0.01;
@@ -240,10 +384,11 @@ function animate() {
     controls.update( delta );
     limitControls(group, controls);
 
-    var k = 0.1;
-    uiGroup.rotation.set(uiGroup.rotation.x * (1 - k) + k * group.rotation.x,
-        uiGroup.rotation.y * (1 - k) + k * group.rotation.y,
-        uiGroup.rotation.z * (1 - k) + k * group.rotation.z);
+    var k = 0.05;
+    var s = 0.2;
+    uiGroup.rotation.set(uiGroup.rotation.x * (1 - k) + s * k * group.rotation.x,
+        uiGroup.rotation.y * (1 - k) + s * k * group.rotation.y,
+        uiGroup.rotation.z * (1 - k) + s * k * group.rotation.z);
 
     checkInteraction(function() {
         document.body.style.cursor = 'pointer';
