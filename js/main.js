@@ -30,10 +30,7 @@ var skills = [];
 var scene, renderer;
 var winResize, controls, stats;
 var camera;
-var group, uiGroup;
-
-// ui
-var logo, header;
+var group, uiGroup, uiActiveGroup;
 
 // interaction
 var mouse = new THREE.Vector2();
@@ -137,10 +134,13 @@ function onDocumentClick( event ) {
     checkInteraction(function(obj) {
         console.log('click', obj);
         if (obj.name === 'logo') {
-            //document.location.href = 'http://interactivelab.ru';
+            document.location.href = 'http://interactivelab.ru';
+        } else if (obj.name === 'itsnotme') {
             blowSkill(skills[0]);
             blowSkill(skills[1]);
             blowSkill(skills[2]);
+        } else if (obj.name === 'itsme') {
+            document.location.href = 'http://interactivelab.ru/Jobs';
         }
     });
 }
@@ -151,8 +151,8 @@ function initHeader() {
         var geometry = new THREE.PlaneGeometry( 0.812, 0.093 );
         //var geometry = new THREE.BoxGeometry( 0.222, 0.022, 0.022 );
         var materialHeader = new THREE.MeshBasicMaterial( { color: 0xffe300, map: headerTexture, transparent: true } );
-        header = new THREE.Mesh( geometry, materialHeader );
-        header.name = 'logo';
+        var header = new THREE.Mesh( geometry, materialHeader );
+        header.name = 'header';
         header.position.set(0, 0, 0);
         header.position.y = 0.7;
         header.position.z = 0.5;
@@ -166,7 +166,7 @@ function initHeader() {
         //var geometry = new THREE.BoxGeometry( 0.222, 0.022, 0.022 );
         var materialHeader = new THREE.MeshBasicMaterial( { color: 0xffe300, map: headerBackTexture, transparent: true } );
         var headerBack = new THREE.Mesh( geometry, materialHeader );
-        headerBack.name = 'logo';
+        headerBack.name = 'header_back';
         headerBack.position.set(0, 0, 0);
         headerBack.position.y = 0.7;
         headerBack.position.z = 0.47;
@@ -183,6 +183,7 @@ function initSkills() {
 
         var gridObj = collada.scene.children[0];
         gridObj.position.z = 0.5;
+        gridObj.position.y = 0.1;
 
         gridObj.rotation.x = Math.PI/2;
         gridObj.rotation.y = Math.PI/2;
@@ -201,11 +202,16 @@ function initSkills() {
             var mat = new THREE.ShaderMaterial( {
                 uniforms: uniforms,
                 vertexShader: THREE.DiscardShader.vertexShader,
-                fragmentShader: THREE.DiscardShader.fragmentShader
+                fragmentShader: THREE.DiscardShader.fragmentShader,
+            //    wireframe: true
             } );
             console.log(mat);
             uniforms.map.value = textures.opengl;
-            uniforms.color.value = new THREE.Color().setHSL(THREE.Math.randFloat(0, 1), 1, 0.5);
+            cs.userData.color1 = new THREE.Color().setHSL(THREE.Math.randFloat(0, 1), 1, 0.5);
+            cs.userData.color2 = new THREE.Color().setHSL(THREE.Math.randFloat(0, 1), 1, 0.5);
+            cs.userData.colodIdx = 0;
+            uniforms.color.value = new THREE.Color().set(cs.userData.color1);
+
             cs.userData.sharedMaterial = mat;
             setSkillMaterial(cs, mat);
             cs.position.x = -1 + i * 1;
@@ -306,20 +312,29 @@ function initAmbientShapes() {
 }
 
 function initLogo() {
-    var logoTexture = THREE.ImageUtils.loadTexture( 'images/logo.png', THREE.UVMapping, function() {
-        console.log('Logo loaded');
-        var geometry = new THREE.PlaneGeometry( 0.222, 0.022 );
-        //var geometry = new THREE.BoxGeometry( 0.222, 0.022, 0.022 );
-        var materialLogo = new THREE.MeshBasicMaterial( { color: 0xffe300, map: logoTexture } );
-        logo = new THREE.Mesh( geometry, materialLogo );
-        logo.name = 'logo';
-        logo.position.set(0, 0, 0);
-        logo.position.y = -0.95;
-        logo.position.z = 0.5;
-        logo.scale.set(3, 3, 3);
-        //logo.scale.set(5, 5, 5);
-        uiGroup.add(logo);
+    initImage('logo', 'images/logo.png', new THREE.Vector2( 0.222, 0.022 ),
+        0xffe300, new THREE.Vector3( 0, -1, 0.5 ), 2);
+}
+
+function initImage(name, path, size, color, position, scale) {
+   var tex = THREE.ImageUtils.loadTexture( path, THREE.UVMapping, function() {
+        console.log(path + ' loaded');
+        var geometry = new THREE.PlaneGeometry( size.x, size.y );
+        var material = new THREE.MeshBasicMaterial( { color: color, map: tex, transparent: true } );
+        var image = new THREE.Mesh( geometry, material );
+        image.name = name;
+        image.position.copy(position);
+        image.scale.set(scale, scale, scale);
+        uiActiveGroup.add(image);
+        console.log(image);
     } );
+}
+
+function initButtons() {
+    initImage('itsme', 'images/itsme.png', new THREE.Vector2( 0.159, 0.038 ),
+        0x000000, new THREE.Vector3( 0, -0.75, 0.5 ), 3);
+    initImage('itsnotme', 'images/itsnotme.png', new THREE.Vector2( 0.336, 0.027 ),
+        0x000000, new THREE.Vector3( 0, -0.5, 0.5 ), 3);
 }
 
 function initUI() {
@@ -331,14 +346,18 @@ function initUI() {
     gui.add(settings, 'damping', 0, 1);
     gui.add(settings, 'return speed', 0, 1);
     gui.add(settings, 'Test!');
+    gui.close();
 
     uiGroup = new THREE.Object3D();
     uiGroup.name = 'UI';
     scene.add(uiGroup);
-    console.log('uiGroup', uiGroup);
+    uiActiveGroup = new THREE.Object3D();
+    uiActiveGroup.name = 'Active UI';
+    uiGroup.add(uiActiveGroup);
 
     initLogo();
     initHeader();
+    initButtons();
 }
 
 function limitControls(target) {
@@ -389,7 +408,7 @@ function checkInteraction(callback, noCallback) {
     var vector = new THREE.Vector3( mouse.x, mouse.y, 1 );
     projector.unprojectVector( vector, camera );
     raycaster.set( camera.position, vector.sub( camera.position ).normalize() );
-    var intersects = raycaster.intersectObjects( uiGroup.children );
+    var intersects = raycaster.intersectObjects( uiActiveGroup.children );
 
     if ( intersects.length > 0 ) {
         // if (intersects[0].object !== uiGroup) {
@@ -431,5 +450,21 @@ function animate() {
 
     stats.end();
 }
+
+setInterval(function() {
+            console.log('blink');
+            for (var i = skills.length - 1; i >= 0; i--) {
+                var skill = skills[i];
+                if (!skill.userData.alive) {
+                    if (skill.userData.colorIdx === 0) {
+                        skill.userData.colorIdx = 1;
+                        skill.userData.sharedMaterial.uniforms.color.value.set(skill.userData.color1);
+                    } else {
+                        skill.userData.colorIdx = 0;
+                        skill.userData.sharedMaterial.uniforms.color.value.set(skill.userData.color2);
+                    }
+                }
+            }
+        }, 1000);
 
 });
