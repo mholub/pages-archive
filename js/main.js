@@ -8,17 +8,21 @@ require({
         deps: ['vendor/three'],
         exports: 'THREE' },
      'vendor/stats': { exports: 'Stats' },
+     'vendor/dat.gui': { exports: 'dat' },
      'other/OBJLoader': {
         deps: ['vendor/three'],
         exports: 'THREE' },
     'other/ColladaLoader': {
         deps: ['vendor/three'],
         exports: 'THREE' },
+    'shaders/DiscardShader': {
+        deps: ['vendor/three'],
+        exports: 'THREE' },
  }
 }, [
-    'vendor/three', 'vendor/threex.windowresize', 'vendor/stats', 'vendor/FlyControls',
-    'other/OBJLoader', 'other/ColladaLoader'
-], function(THREE, THREEx, Stats) {
+    'vendor/three', 'vendor/threex.windowresize', 'vendor/stats', 'vendor/dat.gui', 'vendor/FlyControls',
+    'other/OBJLoader', 'other/ColladaLoader', 'shaders/DiscardShader'
+], function(THREE, THREEx, Stats, dat) {
 
 var textures = {};
 var skills = [];
@@ -38,6 +42,13 @@ var raycaster = new THREE.Raycaster();
 
 // other
 var clock = new THREE.Clock();
+
+var gui;
+var settings = {'Z Spread': 3000, 'Test!': function() {
+    blowSkill(skills[0]);
+    blowSkill(skills[1]);
+    blowSkill(skills[2]);
+}};
 
 preloadAssets();
 animate();
@@ -65,7 +76,7 @@ function init() {
     } );
     renderer.setClearColor(0xffe300, 1);
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.sortObjects = false;
+    //renderer.sortObjects = false;
     document.body.appendChild(renderer.domElement);
     renderer.domElement.style.position = 'absolute';
     renderer.domElement.style.top = '0px';
@@ -127,18 +138,33 @@ function onDocumentClick( event ) {
 }
 
 function initHeader() {
-    header = new THREE.Object3D();
-    header.name = 'header';
-    header.position.y = 0.6;
-    header.position.z = 0.5;
-    header.scale.set(0.0007, 0.0007, 0.0007);
-    uiGroup.add( header );
-
-    var loader = new THREE.JSONLoader();
-    loader.load( 'models/header2.js', function ( geometry ) {
-        var piece = new THREE.Line(geometry, new THREE.LineBasicMaterial( {color: 0x000000, linewidth: 2, wireframe: true } ), THREE.LineStrip);
-        header.add(piece);
-        console.log('header loaded');
+    var headerTexture = THREE.ImageUtils.loadTexture( 'images/header.png', THREE.UVMapping, function() {
+        console.log('Header loaded');
+        var geometry = new THREE.PlaneGeometry( 0.812, 0.093 );
+        //var geometry = new THREE.BoxGeometry( 0.222, 0.022, 0.022 );
+        var materialHeader = new THREE.MeshBasicMaterial( { color: 0xffe300, map: headerTexture, transparent: true } );
+        header = new THREE.Mesh( geometry, materialHeader );
+        header.name = 'logo';
+        header.position.set(0, 0, 0);
+        header.position.y = 0.7;
+        header.position.z = 0.5;
+        header.scale.set(3, 3, 3);
+        //logo.scale.set(5, 5, 5);
+        uiGroup.add(header);
+    } );
+    var headerBackTexture = THREE.ImageUtils.loadTexture( 'images/header_back.png', THREE.UVMapping, function() {
+        console.log('Header Back loaded');
+        var geometry = new THREE.PlaneGeometry( 0.812, 0.093 );
+        //var geometry = new THREE.BoxGeometry( 0.222, 0.022, 0.022 );
+        var materialHeader = new THREE.MeshBasicMaterial( { color: 0xffe300, map: headerBackTexture, transparent: true } );
+        var headerBack = new THREE.Mesh( geometry, materialHeader );
+        headerBack.name = 'logo';
+        headerBack.position.set(0, 0, 0);
+        headerBack.position.y = 0.7;
+        headerBack.position.z = 0.47;
+        headerBack.scale.set(3, 3, 3);
+        //logo.scale.set(5, 5, 5);
+        uiGroup.add(headerBack);
     } );
 }
 
@@ -162,10 +188,16 @@ function initSkills() {
             var cs = gridObj.clone();
             cs.userData.alive = false;
 
-            var mat = new THREE.MeshBasicMaterial( { color: new THREE.Color().setHSL(THREE.Math.randFloat(0, 1), 1, 0.5), transparent: true } );
-             //mat.color = 0x000000;
+            var uniforms = THREE.UniformsUtils.clone(THREE.DiscardShader.uniforms);
+
+            var mat = new THREE.ShaderMaterial( {
+                uniforms: uniforms,
+                vertexShader: THREE.DiscardShader.vertexShader,
+                fragmentShader: THREE.DiscardShader.fragmentShader
+            } );
             console.log(mat);
-            mat.map = THREE.Math.randFloat(0, 1) > 0.5 ? textures.opengl : textures.opengl;
+            uniforms.map.value = textures.opengl;
+            uniforms.color.value = new THREE.Color().setHSL(1, 1, 0.5);
             cs.userData.sharedMaterial = mat;
             setSkillMaterial(cs, mat);
             cs.position.x = -1 + i * 1;
@@ -198,14 +230,14 @@ function updateSkills(delta) {
                     //p.userData.velocity.multiplyScalar(0.95);
                     p.position.add(p.userData.velocity.clone().multiplyScalar(delta));
 
-                    if (p.position.distanceTo(p.userData.origPos) > 30) {
+                    if (p.position.distanceTo(p.userData.origPos) > 10) {
                         //p.userData.velocity.set(0, 0, 0);
                         readyToSwap+=1;
 
                         p.userData.acceleration.set(0, 0, 0);
                     }
                     if (p.userData.acceleration.lengthSq() < 1) {
-                        p.userData.velocity.multiplyScalar(0.8);
+                        p.userData.velocity.multiplyScalar(0.5);
                         if (p.userData.velocity.lengthSq() < 0.001) {
                             p.position.lerp(p.userData.origPos, 0.2);
                         }
@@ -234,14 +266,10 @@ function blowSkill(skill) {
         var p = skill.children[l];
         var v = new THREE.Vector3( THREE.Math.randFloatSpread(50), 0, THREE.Math.randFloatSpread(50) )
         .normalize();
-        v.multiplyScalar(THREE.Math.randFloat(40, 50));
-        v.y = THREE.Math.randFloatSpread(30);
+        v.multiplyScalar(THREE.Math.randFloat(80, 100));
+        v.y = THREE.Math.randFloatSpread(settings['Z Spread']);
         p.userData.velocity = v.clone();
         p.userData.acceleration = v.clone();
-        // setTimeout(function() {
-        //     console.log('Fire', p);
-            
-        // }, l * 10);
     }
     console.log('Blow: ', skill);
 }
@@ -292,15 +320,19 @@ function initLogo() {
         logo = new THREE.Mesh( geometry, materialLogo );
         logo.name = 'logo';
         logo.position.set(0, 0, 0);
-        logo.position.y = -0.8;
+        logo.position.y = -0.95;
         logo.position.z = 0.5;
-        logo.scale.set(2, 2, 2);
+        logo.scale.set(3, 3, 3);
         //logo.scale.set(5, 5, 5);
         uiGroup.add(logo);
     } );
 }
 
 function initUI() {
+    gui = new dat.GUI({height: 100});
+    gui.add(settings, 'Z Spread', 0, 3000);
+    gui.add(settings, 'Test!');
+
     uiGroup = new THREE.Object3D();
     uiGroup.name = 'UI';
     scene.add(uiGroup);
