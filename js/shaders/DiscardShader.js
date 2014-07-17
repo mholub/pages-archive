@@ -9,8 +9,8 @@ THREE.DiscardShader = {
 	uniforms: {
 
 		"map": { type: "t", value: null },
-		"color":    { type: "c", value: new THREE.Color( 0xffffff ) }
-
+		"color":    { type: "c", value: new THREE.Color( 0xffffff ) },
+		"opacity":    { type: "f", value: 1.0 }
 	},
 
 	vertexShader: [
@@ -30,6 +30,7 @@ THREE.DiscardShader = {
 
 		"uniform vec3 color;",
 		"uniform sampler2D map;",
+		"uniform float opacity;",
 
 		"varying vec2 vUv;",
 
@@ -40,7 +41,7 @@ THREE.DiscardShader = {
 				'discard;',
 			'}',
 
-			"gl_FragColor = vec4( texel.rgb * color, texel.a );",
+			"gl_FragColor = vec4( texel.rgb * color, texel.a * opacity );",
 
 		"}"
 
