@@ -39,142 +39,142 @@ Array.prototype.contains = function(obj) {
 
 var skillDatas = [
 {
-    path: '__0000_OPENCV.png',
+    path: 'skills/0000_OPENCV.png',
     url: 'http://opencv.org/',
     length: 34
 },
 {
-    path: '__0001_UX.png',
+    path: 'skills/__0001_UX.png',
     url: 'http://en.wikipedia.org/wiki/User_experience',
     length: 11
 },
 {
-    path: '__0002_NUI.png',
+    path: 'skills/__0002_NUI.png',
     url: 'http://en.wikipedia.org/wiki/Natural_user_interface',
     length: 15
 },
 {
-    path: '__0003_KINECT.png',
+    path: 'skills/__0003_KINECT.png',
     url: 'http://www.microsoft.com/en-us/kinectforwindows/',
     length: 31
 },
 {
-    path: '__0004_RPI.png',
+    path: 'skills/__0004_RPI.png',
     url: 'http://www.raspberrypi.org/',
     length: 15
 },
 {
-    path: '__0005_ARDUINO.png',
+    path: 'skills/__0005_ARDUINO.png',
     url: 'http://arduino.cc/',
     length: 39
 },
 {
-    path: '__0006_GPGPU.png',
+    path: 'skills/__0006_GPGPU.png',
     url: 'http://en.wikipedia.org/wiki/General-purpose_computing_on_graphics_processing_units',
     length: 29
 },
 {
-    path: '__0007_threejs.png',
+    path: 'skills/__0007_threejs.png',
     url: 'http://threejs.org/',
     length: 38
 },
 {
-    path: '__0008_shaders.png',
+    path: 'skills/__0008_shaders.png',
     url: 'http://en.wikipedia.org/wiki/Shader',
     length: 40
 },
 {
-    path: '__0010_cuda.png',
+    path: 'skills/__0010_cuda.png',
     url: 'http://www.nvidia.ru/object/cuda_home_new.html',
     length: 23
 },
 {
-    path: '__0011_qc.png',
+    path: 'skills/__0011_qc.png',
     url: 'http://en.wikipedia.org/wiki/Quartz_Composer',
     length: 11
 },
 {
-    path: '__0012_CG.png',
+    path: 'skills/__0012_CG.png',
     url: 'http://en.wikipedia.org/wiki/Computer_graphics',
     length: 11
 },
 {
-    path: '__0013_media-art.png',
+    path: 'skills/__0013_media-art.png',
     url: 'http://www.creativeapplications.net/',
     length: 51
 },
 {
-    path: '__0014_cinema4d.png',
+    path: 'skills/__0014_cinema4d.png',
     url: 'http://www.maxon.net/products/cinema-4d-studio/who-should-use-it.html',
     length: 45
 },
 {
-    path: '__0015_maya.png',
+    path: 'skills/__0015_maya.png',
     url: 'http://www.autodesk.com/products/autodesk-maya/overview',
     length: 25
 },
 {
-    path: '__0016_td.png',
+    path: 'skills/__0016_td.png',
     url: 'http://www.derivative.ca/',
     length: 11
 },
 {
-    path: '__0017_C%2B%2B.png',
+    path: 'skills/__0017_C%2B%2B.png',
     url: 'http://en.wikipedia.org/wiki/C%2B%2B',
     length: 13
 },
 {
-    path: '__0018_HOUDINI.png',
+    path: 'skills/__0018_HOUDINI.png',
     url: 'http://www.sidefx.com/',
     length: 37
 },
 {
-    path: '__0019_OF.png',
+    path: 'skills/__0019_OF.png',
     url: 'http://www.openframeworks.cc/',
     length: 9
 },
 {
-    path: '__0020_C%23.png',
+    path: 'skills/__0020_C%23.png',
     url: 'http://en.wikipedia.org/wiki/C_Sharp_(programming_language)',
     length: 11
 },
 {
-    path: '__0021_WebGL.png',
+    path: 'skills/__0021_WebGL.png',
     url: 'http://www.chromeexperiments.com/webgl/',
     length: 27
 },
 {
-    path: '__0022_Direct3D.png',
+    path: 'skills/__0022_Direct3D.png',
     url: 'http://en.wikipedia.org/wiki/Direct3D',
     length: 44
 },
 {
-    path: '__0024_HLSL.png',
+    path: 'skills/__0024_HLSL.png',
     url: 'http://en.wikipedia.org/wiki/High-level_shader_language',
     length: 20
 },
 {
-    path: '__0025_GLSL.png',
+    path: 'skills/__0025_GLSL.png',
     url: 'http://en.wikipedia.org/wiki/OpenGL_Shading_Language',
     length: 20
 },
 {
-    path: '__0026_Processing.png',
+    path: 'skills/__0026_Processing.png',
     url: 'https://www.processing.org/exhibition/',
     length: 56
 },
 {
-    path: '__0027_VVVV.png',
+    path: 'skills/__0027_VVVV.png',
     url: 'http://vvvv.org/',
     length: 23
 },
 {
-    path: '__0028_Unity3D.png',
+    path: 'skills/__0028_Unity3D.png',
     url: 'http://unity3d.com/',
     length: 39
 },
 {
-    path: '__0029_Flash.png',
+    path: 'skills/__0029_Flash.png',
     url: 'http://www.adobe.com/devnet/flash.html',
     length: 27
 }
