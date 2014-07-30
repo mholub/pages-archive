@@ -216,7 +216,8 @@ animate();
 
 function openInNewTab(url) {
   var win = window.open(url, '_blank');
-  win.focus();
+  if (win)
+    win.focus();
 }
 
 function preloadAssets() {
@@ -285,7 +286,8 @@ function onDocumentMouseMove( event ) {
 function onDocumentClick( event ) {
     event.preventDefault();
 
-    checkInteraction(function(obj) {
+    checkInteraction(function(intersection) {
+        var obj = intersection.object;
         console.log('click', obj);
         if (obj.name === 'logo') {
             openInNewTab('http://interactivelab.ru');
@@ -297,55 +299,81 @@ function onDocumentClick( event ) {
             }
         } else if (obj.name === 'itsme') {
             document.location.href = 'http://interactivelab.ru/Jobs';
+        } else {
+            if (obj.parent.parent.name == 'skill') {
+                console.log('Skill: ', intersection);
+
+                for (var i = skills.length - 1; i >= 0; i--) {                    
+                    if (skills[i].userData.skillData) {
+                        var d = skills[i].userData.offsetPosition.distanceTo(intersection.point);
+                        if (d < skills[i].userData.skillData.data.length / 64.0) {
+                            console.log('match');
+                            console.log(skills[i].userData.skillData.data.url, d);    
+                            
+                            openInNewTab(skills[i].userData.skillData.data.url);
+                            break;
+                        } else {
+                            console.log('no match');
+                            console.log(skills[i].userData.skillData.data.url, d, skills[i].userData.skillData.data.length / 128.0);    
+                        }                   
+                    }
+                    
+                };
+            }
         }
     });
 }
 
 function initHeader() {
     var headerTexture = THREE.ImageUtils.loadTexture( 'images/header.png', THREE.UVMapping, function() {
-        var geometry = new THREE.PlaneGeometry( 0.812, 0.093 );
-        //var geometry = new THREE.BoxGeometry( 0.222, 0.022, 0.022 );
-        var materialHeader = new THREE.MeshBasicMaterial( { color: 0xffe300, map: headerTexture, transparent: true } );
-        var header = new THREE.Mesh( geometry, materialHeader );
-        header.name = 'header';
-        header.position.set(0, 0, 0);
-        header.position.y = 0.7;
-        header.position.z = 0.5;
-        header.scale.set(3, 3, 3);
-        //logo.scale.set(5, 5, 5);
-        uiGroup.add(header);
+        var headerBackTexture = THREE.ImageUtils.loadTexture( 'images/header_back.png', THREE.UVMapping, function() {
+            var geometry = new THREE.PlaneGeometry( 1.000, 0.103 );
+            //var geometry = new THREE.BoxGeometry( 0.222, 0.022, 0.022 );
+            var materialHeader = new THREE.MeshBasicMaterial( { map: headerBackTexture, transparent: true } );
+            var headerBack = new THREE.Mesh( geometry, materialHeader );
+            headerBack.name = 'header_back';
+            headerBack.position.set(0, 0, 0);
+            headerBack.position.y = 0.7;
+            headerBack.position.z = 0.475;
+            headerBack.scale.set(3, 3, 3);
+            uiGroup.add(headerBack);
+
+            var geometry = new THREE.PlaneGeometry( 1.000, 0.103 );
+        
+            var materialHeader = new THREE.MeshBasicMaterial( { map: headerTexture, transparent: true } );
+            var header = new THREE.Mesh( geometry, materialHeader );
+            header.name = 'header';
+            header.position.set(0, 0, 0);
+            header.position.y = 0.7;
+            header.position.z = 0.5;
+            header.scale.set(3, 3, 3);
+            uiGroup.add(header);
+        } );        
     } );
-    var headerBackTexture = THREE.ImageUtils.loadTexture( 'images/header_back.png', THREE.UVMapping, function() {
-        var geometry = new THREE.PlaneGeometry( 0.812, 0.093 );
-        //var geometry = new THREE.BoxGeometry( 0.222, 0.022, 0.022 );
-        var materialHeader = new THREE.MeshBasicMaterial( { color: 0xffe300, map: headerBackTexture, transparent: true } );
-        var headerBack = new THREE.Mesh( geometry, materialHeader );
-        headerBack.name = 'header_back';
-        headerBack.position.set(0, 0, 0);
-        headerBack.position.y = 0.7;
-        headerBack.position.z = 0.47;
-        headerBack.scale.set(3, 3, 3);
-        //logo.scale.set(5, 5, 5);
-        uiGroup.add(headerBack);
-    } );
+    
 }
 
 function pickSkills() {
     var skills = [];
     var usedIdx = [];
     var l = 0;
+    tries = 0;
     while(true) {
         var randInd = THREE.Math.randInt(0, skillDatas.length - 1);
         var sd = skillDatas[randInd];
-        if (l + (sd.length + 2) < 128 && !usedIdx.contains(randInd)) {
+        if (l + (sd.length + 2) < 100 && !usedIdx.contains(randInd)) {
             usedIdx.push(randInd);
             skills.push({
                 data: sd,
                 offset: l + sd.length/2
             });
             l += (sd.length + 5);
+            tries = 0;
         } else {
-            break;
+            tries += 1;
+            if (tries > 10) {
+                break;
+            }
         }
     }
     console.log('LENGTH ', l);
@@ -506,11 +534,13 @@ function checkInteraction(callback, noCallback) {
     var vector = new THREE.Vector3( mouse.x, mouse.y, 1 );
     projector.unprojectVector( vector, camera );
     raycaster.set( camera.position, vector.sub( camera.position ).normalize() );
-    var intersects = raycaster.intersectObjects( uiActiveGroup.children );
+    var intersects = raycaster.intersectObjects( uiActiveGroup.children, true );    
 
-    if ( intersects.length > 0 ) {
+    if ( intersects.length > 0 ) {        
         // if (intersects[0].object !== uiGroup) {
-             callback(intersects[0].object);
+            for (var i = intersects.length - 1; i >= 0; i--) {
+                callback(intersects[i]);
+            }             
         // }
     } else {
         if (noCallback) {

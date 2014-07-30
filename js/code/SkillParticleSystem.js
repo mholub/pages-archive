@@ -1,5 +1,27 @@
+var colors = [
+    0xff0000,
+    0x5baf00,
+    0x3756ae,
+    0x0190cc,
+    0xff6bad,
+    0xe2009a,
+    0xa600dc
+];
+
+function randomPair(range) {
+	var n = 0;
+	var i = THREE.Math.randInt(0, range);
+	do {
+		n += 1;
+		var k = THREE.Math.randInt(0, range);
+	} while (k == i && n < 10);
+	return [i, k];
+}
+
 var SkillParticleSystem = function(objProto, settings) {
 	var obj = objProto.clone();	
+
+    obj.name = 'skill';
 
 	// functions
 	obj.swapColor = function() {
@@ -20,25 +42,30 @@ var SkillParticleSystem = function(objProto, settings) {
     }
 
     obj.setSkill = function(sd, totalLength) {
-    	obj.userData.alive = sd != undefined;	
+    	obj.userData.alive = sd != undefined;
 
-		obj.userData.color1 = new THREE.Color().setHSL(THREE.Math.randFloat(0, 1), 1, 0.5);
-    	obj.userData.color2 = new THREE.Color().setHSL(THREE.Math.randFloat(0, 1), 1, 0.5);
+    	var indices = randomPair(colors.length);    	
+
+		obj.userData.color1 = new THREE.Color(colors[indices[0]]);
+    	obj.userData.color2 = new THREE.Color(colors[indices[1]]);
     	obj.userData.colodIdx = 0;
     	obj.swapColor();  
 
     	obj.userData.skillData = sd;
     	if (sd) {
                 obj.userData.sharedMaterial.uniforms.map.value = sd.data.texture;
-                obj.userData.sharedMaterial.uniforms.opacity.value = 1;
+                obj.userData.sharedMaterial.uniforms.opacity.value = 1;                
 
                 for (var l = obj.children.length - 1; l >= 0; l--) {
 	        		var c = obj.children[l];
 	        		c.userData.origPos = new THREE.Vector3( 0, 0,  
 	        		c.userData.defPos.z + (-totalLength/2 + sd.offset));
 		        }
+                obj.userData.offsetPosition = obj.localToWorld(obj.children[0].userData.origPos);
+                console.log('OFFSET POSITION: ', obj.matrix);
             } else {
                 obj.userData.sharedMaterial.uniforms.opacity.value = 0;
+                obj.userData.offsetPosition = new THREE.Vector3( );
                 for (var l = obj.children.length - 1; l >= 0; l--) {
 	        		var c = obj.children[l];
 	        		c.userData.origPos = new THREE.Vector3();
@@ -96,7 +123,8 @@ var SkillParticleSystem = function(objProto, settings) {
     obj.rotation.y = Math.PI/2;
 
     var k = 0.03;
-    obj.scale.set(k, k, k);
+    obj.scale.set(k, k, k);    
+    obj.updateMatrixWorld(true);
 
     var uniforms = THREE.UniformsUtils.clone(THREE.DiscardShader.uniforms);
 
