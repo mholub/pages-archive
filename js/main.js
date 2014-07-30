@@ -286,6 +286,8 @@ function onDocumentMouseMove( event ) {
 function onDocumentClick( event ) {
     event.preventDefault();
 
+    console.log('CLICK', event);
+
     checkInteraction(function(intersection) {
         var obj = intersection.object;
         console.log('click', obj);
@@ -311,7 +313,7 @@ function onDocumentClick( event ) {
                             console.log(skills[i].userData.skillData.data.url, d);    
                             
                             openInNewTab(skills[i].userData.skillData.data.url);
-                            break;
+                            return;
                         } else {
                             console.log('no match');
                             console.log(skills[i].userData.skillData.data.url, d, skills[i].userData.skillData.data.length / 128.0);    
@@ -538,9 +540,9 @@ function checkInteraction(callback, noCallback) {
 
     if ( intersects.length > 0 ) {        
         // if (intersects[0].object !== uiGroup) {
-            for (var i = intersects.length - 1; i >= 0; i--) {
-                callback(intersects[i]);
-            }             
+            //for (var i = intersects.length - 1; i >= 0; i--) {
+                callback(intersects[0]);
+            //}             
         // }
     } else {
         if (noCallback) {
