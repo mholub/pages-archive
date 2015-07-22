@@ -14,8 +14,8 @@
 	</head>
 	<body>
 		<script src="js/three.min.js"></script>
-
-		<script src="js/SimplexNoise.js"></script>
+		<script src="js/libs/dat.gui.min.js"></script>
+		<script src="js/LissajousThree.js"></script>
 
 		<script src="js/shaders/ConvolutionShader.js"></script>
 		<script src="js/shaders/CopyShader.js"></script>
@@ -42,7 +42,8 @@
 			windowHalfY = window.innerHeight / 2,
 
 			camera, scene, renderer, material, composer, clock,
-			geometry, geoData;
+			gui,
+			geometry, currentLissajousPreset;
 
 
 			init();
@@ -70,26 +71,15 @@
 
 				container.appendChild( renderer.domElement );
 
-				geoData = {
-					pointsCount: 3000, // how many points in all the composition
-					primCount: 40, // how many shapes (ex: triangles)
-					radius: 0.8, // main circle radius (which connects centers of shapes)
-					phaseOffset : 0,
-					primPointsCount : 8, // how many points in shape (3 for triangle)
-					primRadius: 0.6,
-					primPhaseOffset: 0.0,
-
-					noise: new SimplexNoise()	// size of the shape
-				}
+				var pointsCount = 1000;
 
 				geometry = new THREE.Geometry(),
 					colors = [];
 
-				for ( i = 0; i < geoData.pointsCount + 1; i ++ ) {
-					var t = i / geoData.pointsCount;
-					var p = figure1(t, geoData);
+				ngons1 = new Figure1Data();
 
-					geometry.vertices.push( p );
+				for ( i = 0; i < pointsCount + 1; i ++ ) {
+					geometry.vertices.push( new THREE.Vector3() );
 
 					colors[ i ] = new THREE.Color( 0xffffff );
 					colors[ i ].setRGB(3/255.0, 100/255.0, 150/255.0);
@@ -148,10 +138,21 @@
 				composer.addPass( effectBloom );
 				composer.addPass( effectCopy );
 
-				//
-
 				window.addEventListener( 'resize', onWindowResize, false );
 
+				var guiSettings = {
+						preset1: function() {
+							currentLissajousPreset = LissajousNgons1;
+						},
+						preset2: function() {
+							currentLissajousPreset = LissajousNgons2;
+						}
+				}
+				guiSettings.preset1();
+				// GUI
+				var gui = new dat.GUI(guiSettings);
+				gui.add(guiSettings, "preset1");
+				gui.add(guiSettings, "preset2");
 			}
 
 			function onWindowResize() {
@@ -189,7 +190,6 @@
 					mouseY = event.touches[ 0 ].pageY - windowHalfY;
 
 				}
-
 			}
 
 			function onDocumentTouchMove( event ) {
@@ -211,14 +211,9 @@
 				requestAnimationFrame( animate );
 
 				// animate params
-				geoData.primPhaseOffset = 0.1 * clock.getElapsedTime();
-				geoData.phaseOffset = 0.1 * clock.getElapsedTime();
-				geoData.radius = Math.sin(0.3 * clock.getElapsedTime());
-				geoData.primRadius = 0.2 + 0.6 * Math.cos(0.1 * clock.getElapsedTime());
+				currentLissajousPreset.animate(clock.getElapsedTime());
 
-				geoData.primPointsCount = Math.ceil(clock.getElapsedTime() / 10) % 8 + 2;
-
-				updatePoints(geometry);
+				updatePoints(geometry, currentLissajousPreset);
 				render();
 
 				stats.update();
@@ -234,70 +229,18 @@
 
 				var time = Date.now() * 0.0005;
 
+/*
 				for ( var i = 0; i < scene.children.length; i ++ ) {
 
 					var object = scene.children[ i ];
-					if ( object instanceof THREE.Line ) object.rotation.y = time * ( i % 2 ? 1 : -1 );
+					if ( object instanceof THREE.Line ) object.rotation.y = 0.1 * Math.sin(time * ( i % 2 ? 1 : -1 ));
 
 				}
-
+*/
 				renderer.clear();
 				composer.render();
 
 			}
-
-			// var geoData = {
-			// 	pointsCount: 300, // how many points in all the composition
-			// 	primCount: 10, // how many shapes (ex: triangles)
-			// 	radius: 1.5, // main circle radius (which connects centers of shapes)
-			// 	primPointsCount : 6, // how many points in shape (3 for triangle)
-			// 	primRadius: 0.2	// size of the shape
-			// }
-
-			function figure1(t, params) {
-				var primNum = Math.floor(t * params.primCount); // index of figure (triangle, pentagon, etc) [0, primCount]
-				var nt = t * params.primCount - primNum; // normalized t inside the figure [0, 1]
-
-				var primPhase = primNum / params.primCount + params.phaseOffset;
-				var centerOfPrim =  circlePoint(params.radius, primPhase);
-
-				var primPointNum = Math.floor(nt * params.primPointsCount);
-
-
-				var k = 0 + primNum;//primNum + 5;
-				var pointNT = nt * params.primPointsCount - primPointNum;
-
-				var prevPointInPrim = circlePoint(params.primRadius, (primPointNum + k) / params.primPointsCount + primPhase + params.primPhaseOffset);
-				var nextPointInPrim = circlePoint(params.primRadius, (primPointNum + 1 + k) / params.primPointsCount + primPhase + params.primPhaseOffset);
-
-				if (pointNT <= 1 / params.primPointsCount) {
-					pointNT += 0.02;
-				} else if (pointNT > 1 - 1 / params.primPointsCount) {
-					pointNT -= 0.2;
-				}
-				var pointInPrim = new THREE.Vector3();
-				pointInPrim.lerpVectors(prevPointInPrim, nextPointInPrim, pointNT);
-
-				var p = new THREE.Vector3();
-				p.addVectors(centerOfPrim, pointInPrim);
-				return p;
-			}
-
-			// utilities
-			function circlePoint(radius, nangle) { // angle is [0, 1]
-				return new THREE.Vector3(radius * Math.cos(nangle * 2 * Math.PI), radius * Math.sin(nangle * 2 * Math.PI), 0);
-			}
-
-			function updatePoints(geometry) {
-				for ( i = 0; i < geoData.pointsCount + 1; i ++ ) {
-					var t = i / geoData.pointsCount;
-					var p = figure1(t, geoData);
-
-					geometry.vertices[i] = p;
-				}
-				geometry.verticesNeedUpdate = true;
-			}
-
 		</script>
 	</body>
 </html>
