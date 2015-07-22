@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>three.js webgl - lines - cubes - colors</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<style>
+			body {
+				background-color: #000000;
+				margin: 0px;
+				overflow: hidden;
+			}
+		</style>
+	</head>
+	<body>
+		<script src="js/three.min.js"></script>
+
+		<script src="js/SimplexNoise.js"></script>
+
+		<script src="js/shaders/ConvolutionShader.js"></script>
+		<script src="js/shaders/CopyShader.js"></script>
+		<script src="js/shaders/FXAAShader.js"></script>
+
+		<script src="js/postprocessing/EffectComposer.js"></script>
+		<script src="js/postprocessing/MaskPass.js"></script>
+		<script src="js/postprocessing/RenderPass.js"></script>
+		<script src="js/postprocessing/ShaderPass.js"></script>
+		<script src="js/postprocessing/BloomPass.js"></script>
+
+		<script src="js/Detector.js"></script>
+		<script src="js/libs/stats.min.js"></script>
+
+		<script>
+
+			if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
+
+			var effectFXAA;
+
+			var mouseX = 0, mouseY = 0,
+
+			windowHalfX = window.innerWidth / 2,
+			windowHalfY = window.innerHeight / 2,
+
+			camera, scene, renderer, material, composer, clock,
+			geometry, geoData;
+
+
+			init();
+			animate();
+
+			function init() {
+
+				var i, container;
+
+				clock = new THREE.Clock(true);
+
+				container = document.createElement( 'div' );
+				document.body.appendChild( container );
+
+				camera = new THREE.PerspectiveCamera( 44, window.innerWidth / window.innerHeight, 0.1, 100 );
+				camera.position.z = 2;
+
+				scene = new THREE.Scene();
+
+				renderer = new THREE.WebGLRenderer( { antialias: false, alpha: true } );
+				renderer.setPixelRatio( window.devicePixelRatio );
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				renderer.autoClear = false;
+				renderer.state.setBlending(THREE.AdditiveBlending);
+
+				container.appendChild( renderer.domElement );
+
+				geoData = {
+					pointsCount: 3000, // how many points in all the composition
+					primCount: 40, // how many shapes (ex: triangles)
+					radius: 0.8, // main circle radius (which connects centers of shapes)
+					phaseOffset : 0,
+					primPointsCount : 8, // how many points in shape (3 for triangle)
+					primRadius: 0.6,
+					primPhaseOffset: 0.0,
+
+					noise: new SimplexNoise()	// size of the shape
+				}
+
+				geometry = new THREE.Geometry(),
+					colors = [];
+
+				for ( i = 0; i < geoData.pointsCount + 1; i ++ ) {
+					var t = i / geoData.pointsCount;
+					var p = figure1(t, geoData);
+
+					geometry.vertices.push( p );
+
+					colors[ i ] = new THREE.Color( 0xffffff );
+					colors[ i ].setRGB(3/255.0, 100/255.0, 150/255.0);
+				}
+				geometry.colors = colors;
+
+				// lines
+
+				material = new THREE.LineBasicMaterial( { color: 0xffffff, opacity: 1, linewidth: 2, vertexColors: THREE.VertexColors, blending: THREE.AdditiveBlending, transparent: true } );
+
+				var line, p, scale = 0.3, d = 225;
+				var parameters =  [
+					[ material, scale*1.5, [0,0,0],  geometry ],
+				];
+
+				for ( i = 0; i < parameters.length; ++i ) {
+
+					p = parameters[ i ];
+					line = new THREE.Line( p[ 3 ],  p[ 0 ] );
+					line.scale.x = line.scale.y = line.scale.z =  p[ 1 ];
+					line.position.x = p[ 2 ][ 0 ];
+					line.position.y = p[ 2 ][ 1 ];
+					line.position.z = p[ 2 ][ 2 ];
+					scene.add( line );
+
+				}
+
+				//
+
+				stats = new Stats();
+				stats.domElement.style.position = 'absolute';
+				stats.domElement.style.top = '0px';
+				//container.appendChild( stats.domElement );
+
+				document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+				document.addEventListener( 'touchstart', onDocumentTouchStart, false );
+				document.addEventListener( 'touchmove', onDocumentTouchMove, false );
+
+				var renderModel = new THREE.RenderPass( scene, camera );
+				var effectBloom = new THREE.BloomPass( 1.3 );
+				var effectCopy = new THREE.ShaderPass( THREE.CopyShader );
+
+				effectFXAA = new THREE.ShaderPass( THREE.FXAAShader );
+
+				var width = window.innerWidth || 2;
+				var height = window.innerHeight || 2;
+
+				effectFXAA.uniforms[ 'resolution' ].value.set( 1 / width, 1 / height );
+
+				effectCopy.renderToScreen = true;
+
+				composer = new THREE.EffectComposer( renderer );
+
+				composer.addPass( renderModel );
+				composer.addPass( effectFXAA );
+				composer.addPass( effectBloom );
+				composer.addPass( effectCopy );
+
+				//
+
+				window.addEventListener( 'resize', onWindowResize, false );
+
+			}
+
+			function onWindowResize() {
+
+				windowHalfX = window.innerWidth / 2;
+				windowHalfY = window.innerHeight / 2;
+
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+
+				renderer.setSize( window.innerWidth, window.innerHeight );
+
+				effectFXAA.uniforms[ 'resolution' ].value.set( 1 / window.innerWidth, 1 / window.innerHeight );
+
+				composer.reset();
+
+			}
+
+			//
+
+			function onDocumentMouseMove( event ) {
+
+				mouseX = event.clientX - windowHalfX;
+				mouseY = event.clientY - windowHalfY;
+
+			}
+
+			function onDocumentTouchStart( event ) {
+
+				if ( event.touches.length > 1 ) {
+
+					event.preventDefault();
+
+					mouseX = event.touches[ 0 ].pageX - windowHalfX;
+					mouseY = event.touches[ 0 ].pageY - windowHalfY;
+
+				}
+
+			}
+
+			function onDocumentTouchMove( event ) {
+
+				if ( event.touches.length == 1 ) {
+
+					event.preventDefault();
+
+					mouseX = event.touches[ 0 ].pageX - windowHalfX;
+					mouseY = event.touches[ 0 ].pageY - windowHalfY;
+				}
+
+			}
+
+			//
+
+			function animate() {
+
+				requestAnimationFrame( animate );
+
+				// animate params
+				geoData.primPhaseOffset = 0.1 * clock.getElapsedTime();
+				geoData.phaseOffset = 0.1 * clock.getElapsedTime();
+				geoData.radius = Math.sin(0.3 * clock.getElapsedTime());
+				geoData.primRadius = 0.2 + 0.6 * Math.cos(0.1 * clock.getElapsedTime());
+
+				geoData.primPointsCount = Math.ceil(clock.getElapsedTime() / 10) % 8 + 2;
+
+				updatePoints(geometry);
+				render();
+
+				stats.update();
+
+			}
+
+			function render() {
+
+				//camera.position.x += ( mouseX - camera.position.x ) * .00005;
+				//camera.position.y += ( - mouseY + 200 - camera.position.y ) * .00005;
+
+				camera.lookAt( scene.position );
+
+				var time = Date.now() * 0.0005;
+
+				for ( var i = 0; i < scene.children.length; i ++ ) {
+
+					var object = scene.children[ i ];
+					if ( object instanceof THREE.Line ) object.rotation.y = time * ( i % 2 ? 1 : -1 );
+
+				}
+
+				renderer.clear();
+				composer.render();
+
+			}
+
+			// var geoData = {
+			// 	pointsCount: 300, // how many points in all the composition
+			// 	primCount: 10, // how many shapes (ex: triangles)
+			// 	radius: 1.5, // main circle radius (which connects centers of shapes)
+			// 	primPointsCount : 6, // how many points in shape (3 for triangle)
+			// 	primRadius: 0.2	// size of the shape
+			// }
+
+			function figure1(t, params) {
+				var primNum = Math.floor(t * params.primCount); // index of figure (triangle, pentagon, etc) [0, primCount]
+				var nt = t * params.primCount - primNum; // normalized t inside the figure [0, 1]
+
+				var primPhase = primNum / params.primCount + params.phaseOffset;
+				var centerOfPrim =  circlePoint(params.radius, primPhase);
+
+				var primPointNum = Math.floor(nt * params.primPointsCount);
+
+
+				var k = 0 + primNum;//primNum + 5;
+				var pointNT = nt * params.primPointsCount - primPointNum;
+
+				var prevPointInPrim = circlePoint(params.primRadius, (primPointNum + k) / params.primPointsCount + primPhase + params.primPhaseOffset);
+				var nextPointInPrim = circlePoint(params.primRadius, (primPointNum + 1 + k) / params.primPointsCount + primPhase + params.primPhaseOffset);
+
+				if (pointNT <= 1 / params.primPointsCount) {
+					pointNT += 0.02;
+				} else if (pointNT > 1 - 1 / params.primPointsCount) {
+					pointNT -= 0.2;
+				}
+				var pointInPrim = new THREE.Vector3();
+				pointInPrim.lerpVectors(prevPointInPrim, nextPointInPrim, pointNT);
+
+				var p = new THREE.Vector3();
+				p.addVectors(centerOfPrim, pointInPrim);
+				return p;
+			}
+
+			// utilities
+			function circlePoint(radius, nangle) { // angle is [0, 1]
+				return new THREE.Vector3(radius * Math.cos(nangle * 2 * Math.PI), radius * Math.sin(nangle * 2 * Math.PI), 0);
+			}
+
+			function updatePoints(geometry) {
+				for ( i = 0; i < geoData.pointsCount + 1; i ++ ) {
+					var t = i / geoData.pointsCount;
+					var p = figure1(t, geoData);
+
+					geometry.vertices[i] = p;
+				}
+				geometry.verticesNeedUpdate = true;
+			}
+
+		</script>
+	</body>
+</html>
