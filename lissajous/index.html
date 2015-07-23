@@ -146,13 +146,18 @@
 						},
 						preset2: function() {
 							currentLissajousPreset = LissajousNgons2;
+						},
+						preset3: function() {
+							currentLissajousPreset = LissajousNgons3;
 						}
+
 				}
-				guiSettings.preset1();
+				guiSettings.preset3();
 				// GUI
 				var gui = new dat.GUI(guiSettings);
 				gui.add(guiSettings, "preset1");
 				gui.add(guiSettings, "preset2");
+				gui.add(guiSettings, "preset3");
 			}
 
 			function onWindowResize() {
@@ -229,14 +234,14 @@
 
 				var time = Date.now() * 0.0005;
 
-/*
+
 				for ( var i = 0; i < scene.children.length; i ++ ) {
 
 					var object = scene.children[ i ];
-					if ( object instanceof THREE.Line ) object.rotation.y = 0.1 * Math.sin(time * ( i % 2 ? 1 : -1 ));
+					//if ( object instanceof THREE.Line ) object.rotation.y = 0.1 * time * ( i % 2 ? 1 : -1 );
 
 				}
-*/
+
 				renderer.clear();
 				composer.render();
 
