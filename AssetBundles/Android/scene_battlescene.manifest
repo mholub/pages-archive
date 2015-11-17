@@ -1,0 +1,123 @@
+ManifestFileVersion: 0
+CRC: 547383766
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: a90ec95fe3c052d47e811a49e5878d1b
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 2dd0b95d3c341367759f8917928b2440
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 20
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 23
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 33
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 81
+  Script: {instanceID: 0}
+- Class: 89
+  Script: {instanceID: 0}
+- Class: 92
+  Script: {instanceID: 0}
+- Class: 104
+  Script: {instanceID: 0}
+- Class: 108
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: 6ea37ae0bcfcf2b44aeb7d57a12eaeb1, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: e68961e15311bb243b0a3a979e456a89, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 895fa5f1f0fff1341a2f003e9b52ea9a, type: 3}
+- Class: 114
+  Script: {fileID: 1392445389, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+- Class: 114
+  Script: {fileID: 1980459831, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+- Class: 114
+  Script: {fileID: -619905303, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+- Class: 114
+  Script: {fileID: 1301386320, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+- Class: 114
+  Script: {fileID: -765806418, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+- Class: 114
+  Script: {fileID: 1679637790, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+- Class: 114
+  Script: {fileID: 1077351063, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+- Class: 114
+  Script: {fileID: 708705254, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+- Class: 114
+  Script: {fileID: 2109663825, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+- Class: 114
+  Script: {fileID: -1184210157, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+- Class: 114
+  Script: {fileID: 1997211142, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+- Class: 114
+  Script: {fileID: 1297475563, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 2770beb2cb0d17b4fb677c50e03435dc, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: b9199a93d705d1d4096f506cc1317297, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: a835ed14b49254f4ab140c22d56a9687, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 923e3334981af4f499c9e598c4564237, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 4fa1eac43835ce7409833a26126ea126, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: b11d1807e39352f48be840c7f26d77db, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: de207f58859c1394ea5c5d9031c2e7bf, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 8db324f9091f6a140a9fdf88b3bdcb0e, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 11c7ccbaeb2de8946aef36368366785f, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 5236f4cac8a55d44d82b6b65dbee7673, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: ba099d1be60419f4fb8478f2a1980f6b, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 9db4875c035da034fa1c0d7b7b242c15, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: ee4402bc2cde87548b6d1d39091232a6, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 933d67ed469f1ee4e9ee1c51a5f980f2, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 7fc0984f8963e014c8a016166e4a3365, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 124
+  Script: {instanceID: 0}
+- Class: 128
+  Script: {instanceID: 0}
+- Class: 136
+  Script: {instanceID: 0}
+- Class: 157
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+- Class: 222
+  Script: {instanceID: 0}
+- Class: 223
+  Script: {instanceID: 0}
+- Class: 224
+  Script: {instanceID: 0}
+- Class: 258
+  Script: {instanceID: 0}
+Assets:
+- Assets/Scenes/BattleScene.unity
+Dependencies:
+- AssetBundles/Android/gui

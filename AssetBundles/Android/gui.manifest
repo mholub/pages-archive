@@ -1,0 +1,62 @@
+ManifestFileVersion: 0
+CRC: 1580484064
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 744b053012a8fe17c19f8b940d3bef15
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 2523ab0f653195c5ad7083c9774f3333
+HashAppended: 0
+ClassTypes:
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 74
+  Script: {instanceID: 0}
+- Class: 91
+  Script: {instanceID: 0}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 128
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+Assets:
+- Assets/Content/GUI/screens/Attack_button.png
+- Assets/Content/GUI/screens/BattleScreen/UP_center.png
+- Assets/Content/GUI/controls/gui_ability_heal-assets/gui_ability_heal_cooldown.png
+- Assets/Content/GUI/controls/button_attack/gui_btn_attack_down.png
+- Assets/Content/GUI/controls/gui_ability_heal-assets/gui_ability_heal_down.png
+- Assets/Content/GUI/controls/button_ability/gui_btn_ability_cancancel.png
+- Assets/Content/GUI/screens/BattleScreen/UP_right.png
+- Assets/Content/GUI/controls/button_attack/gui_btn_attack_disabled.png
+- Assets/Content/GUI/controls/joystick_move/gui_joystick_guide.png
+- Assets/Content/GUI/controls/gui_ability_heal-assets/gui_ability_heal.png
+- Assets/Content/GUI/controls/Joy_control_back.png
+- Assets/Content/GUI/controls/gui_cancel_ability-assets/gui_hud_cancelability_hover.png
+- Assets/Content/GUI/screens/BattleScreen/Botton_right.png
+- Assets/Content/GUI/controls/button_ability/Animations/MiniJoystickAbilityButton.controller
+- Assets/Content/GUI/Fonts/HANDGOTN.TTF
+- Assets/Content/GUI/controls/button_ability/gui_btn_ability_normal.png
+- Assets/Content/GUI/controls/button_ability/Animations/MiniJoystickHide.anim
+- Assets/Content/GUI/controls/gui_cancel_ability-assets/animations/CancelUseButton.controller
+- Assets/Content/GUI/controls/joystick_move/gui_joystick_nub.png
+- Assets/Content/GUI/controls/Joy_control.png
+- Assets/Content/GUI/controls/button_ability/gui_btn_ability_down.png
+- Assets/Content/GUI/controls/button_attack/gui_btn_attack_normal.png
+- Assets/Content/GUI/controls/joystick_move/gui_joystick_underlay.png
+- Assets/Content/GUI/screens/BattleScreen/UP_left.png
+- Assets/Content/GUI/controls/button_ability/gui_joystick_ability_nub.png
+- Assets/Content/GUI/controls/button_ability/gui_btn_ability_cooldown.png
+- Assets/Content/GUI/controls/gui_cancel_ability-assets/gui_hud_cancelability_normal.png
+- Assets/Content/GUI/controls/gui_ability_heal-assets/gui_ability_heal_disabled.png
+- Assets/Content/GUI/controls/button_ability/Animations/MiniJoystickShow.anim
+- Assets/Content/GUI/controls/button_ability/gui_btn_ability_disabled.png
+- Assets/Content/GUI/controls/button_ability/gui_joystick_ability_background.png
+- Assets/Content/GUI/controls/gui_cancel_ability-assets/animations/CancelUseShow.anim
+- Assets/Content/GUI/controls/gui_cancel_ability-assets/animations/CancelUseHide.anim
+Dependencies: []
