@@ -1,5 +1,5 @@
 ManifestFileVersion: 0
-CRC: 1614184010
+CRC: 866558778
 Hashes:
   AssetFileHash:
     serializedVersion: 2
@@ -94,9 +94,9 @@ ClassTypes:
 - Class: 224
   Script: {instanceID: 0}
 Assets:
-- Assets/Content/UI/3dUI/Hero3DIcon.prefab
-- Assets/Content/UI/Control/JoystickButtonsPanel.prefab
-- Assets/Content/UI/3dUI/Icons/meleedd_ab1.png
+- Assets/Resources/UI/3dUI/Hero3DIcon.prefab
+- Assets/Resources/UI/Control/JoystickButtonsPanel.prefab
+- Assets/Resources/UI/3dUI/Icons/meleedd_ab1.png
 - Assets/Content/GUI/screens/Attack_button.png
 - Assets/Content/GUI/screens/BattleScreen/UP_center.png
 - Assets/Content/GUI/controls/gui_ability_heal-assets/gui_ability_heal_cooldown.png
@@ -105,39 +105,39 @@ Assets:
 - Assets/Content/GUI/controls/button_ability/gui_btn_ability_cancancel.png
 - Assets/Content/GUI/screens/BattleScreen/UP_right.png
 - Assets/Content/GUI/controls/button_attack/gui_btn_attack_disabled.png
-- Assets/Content/UI/Widgets/NetworkQualityWidget.prefab
+- Assets/Resources/UI/Widgets/NetworkQualityWidget.prefab
 - Assets/Content/GUI/controls/joystick_move/gui_joystick_guide.png
 - Assets/Content/GUI/controls/gui_ability_heal-assets/gui_ability_heal.png
 - Assets/Content/GUI/controls/Joy_control_back.png
 - Assets/Content/GUI/controls/gui_cancel_ability-assets/gui_hud_cancelability_hover.png
 - Assets/Content/GUI/screens/BattleScreen/Botton_right.png
 - Assets/Content/GUI/controls/button_ability/Animations/MiniJoystickAbilityButton.controller
-- Assets/Content/UI/Screens/BattleScreen.prefab
+- Assets/Resources/UI/Screens/BattleScreen.prefab
 - Assets/Content/GUI/Fonts/HANDGOTN.TTF
 - Assets/Content/GUI/controls/button_ability/gui_btn_ability_normal.png
 - Assets/Content/GUI/controls/button_ability/Animations/MiniJoystickHide.anim
-- Assets/Content/UI/Control/MiniJoystickButtonsPanel.prefab
+- Assets/Resources/UI/Control/MiniJoystickButtonsPanel.prefab
 - Assets/Content/GUI/controls/gui_cancel_ability-assets/animations/CancelUseButton.controller
 - Assets/Content/GUI/controls/joystick_move/gui_joystick_nub.png
-- Assets/Content/UI/3dUI/HeroUI.prefab
+- Assets/Resources/UI/3dUI/HeroUI.prefab
 - Assets/Content/GUI/controls/Joy_control.png
 - Assets/Content/GUI/controls/button_ability/gui_btn_ability_down.png
-- Assets/Content/UI/3dUI/Icons/heal_button.png
+- Assets/Resources/UI/3dUI/Icons/heal_button.png
 - Assets/Content/GUI/controls/button_attack/gui_btn_attack_normal.png
 - Assets/Content/GUI/controls/joystick_move/gui_joystick_underlay.png
 - Assets/Content/GUI/screens/BattleScreen/UP_left.png
 - Assets/Content/GUI/controls/button_ability/gui_joystick_ability_nub.png
-- Assets/Content/UI/3dUI/Icons/meleedd_ab3.png
+- Assets/Resources/UI/3dUI/Icons/meleedd_ab3.png
 - Assets/Content/GUI/controls/button_ability/gui_btn_ability_cooldown.png
-- Assets/Content/UI/Control/MiniJoystickAbilityButton.prefab
+- Assets/Resources/UI/Control/MiniJoystickAbilityButton.prefab
 - Assets/Content/GUI/controls/gui_cancel_ability-assets/gui_hud_cancelability_normal.png
 - Assets/Content/GUI/controls/gui_ability_heal-assets/gui_ability_heal_disabled.png
 - Assets/Content/GUI/controls/button_ability/Animations/MiniJoystickShow.anim
-- Assets/Content/UI/3dUI/Icons/meleedd_ab2.png
+- Assets/Resources/UI/3dUI/Icons/meleedd_ab2.png
 - Assets/Content/GUI/controls/button_ability/gui_btn_ability_disabled.png
-- Assets/Content/UI/3dUI/FlyOffText.prefab
-- Assets/Content/UI/Control/AbilityButton.prefab
-- Assets/Content/UI/HANDGOTN.TTF
+- Assets/Resources/UI/3dUI/FlyOffText.prefab
+- Assets/Resources/UI/Control/AbilityButton.prefab
+- Assets/Resources/UI/HANDGOTN.TTF
 - Assets/Content/GUI/controls/button_ability/gui_joystick_ability_background.png
 - Assets/Content/GUI/controls/gui_cancel_ability-assets/animations/CancelUseShow.anim
 - Assets/Content/GUI/controls/gui_cancel_ability-assets/animations/CancelUseHide.anim
