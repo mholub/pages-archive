@@ -1,0 +1,144 @@
+ManifestFileVersion: 0
+CRC: 1576322472
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 2ca39536bc2a0b0c3b40aba824421605
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: aceacd51c69af16e6f6e1ebee55e5e6d
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 74
+  Script: {instanceID: 0}
+- Class: 91
+  Script: {instanceID: 0}
+- Class: 95
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: 6ea37ae0bcfcf2b44aeb7d57a12eaeb1, type: 3}
+- Class: 114
+  Script: {fileID: 1392445389, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+- Class: 114
+  Script: {fileID: 1980459831, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+- Class: 114
+  Script: {fileID: 1741964061, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+- Class: 114
+  Script: {fileID: 1301386320, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+- Class: 114
+  Script: {fileID: -405508275, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+- Class: 114
+  Script: {fileID: -765806418, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+- Class: 114
+  Script: {fileID: 1679637790, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+- Class: 114
+  Script: {fileID: 708705254, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+- Class: 114
+  Script: {fileID: 2109663825, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+- Class: 114
+  Script: {fileID: -1184210157, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+- Class: 114
+  Script: {fileID: 1297475563, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 6d9eced284dab2c41b699ccf3acd0c36, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 909c8ce27f4c3404e8e0cfdded28fc7d, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 923e3334981af4f499c9e598c4564237, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: fa835287dfe0be140aa452e815acd96f, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 2ace86d733bc311409089668852ea62a, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: de207f58859c1394ea5c5d9031c2e7bf, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 98ef9cc90cab00d48ad6e1bffc18bc45, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 11c7ccbaeb2de8946aef36368366785f, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 5236f4cac8a55d44d82b6b65dbee7673, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: c53bce6bbafdb4f40b2ea331dc59f176, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 9db4875c035da034fa1c0d7b7b242c15, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: ee4402bc2cde87548b6d1d39091232a6, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 7b8dafdd97444c34185ecc020a74d58c, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 933d67ed469f1ee4e9ee1c51a5f980f2, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 913df65e8165a7840b8486238e7b7df3, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 7fc0984f8963e014c8a016166e4a3365, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: c5e70b6f107ff05429262c232a7e7267, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 128
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+- Class: 222
+  Script: {instanceID: 0}
+- Class: 223
+  Script: {instanceID: 0}
+- Class: 224
+  Script: {instanceID: 0}
+Assets:
+- Assets/Resources/UI/3dUI/Hero3DIcon.prefab
+- Assets/Resources/UI/Control/JoystickButtonsPanel.prefab
+- Assets/Resources/UI/3dUI/Icons/meleedd_ab1.png
+- Assets/Content/GUI/screens/Attack_button.png
+- Assets/Content/GUI/screens/BattleScreen/UP_center.png
+- Assets/Content/GUI/controls/gui_ability_heal-assets/gui_ability_heal_cooldown.png
+- Assets/Content/GUI/controls/button_attack/gui_btn_attack_down.png
+- Assets/Content/GUI/controls/gui_ability_heal-assets/gui_ability_heal_down.png
+- Assets/Content/GUI/controls/button_ability/gui_btn_ability_cancancel.png
+- Assets/Content/GUI/screens/BattleScreen/UP_right.png
+- Assets/Content/GUI/controls/button_attack/gui_btn_attack_disabled.png
+- Assets/Resources/UI/Widgets/NetworkQualityWidget.prefab
+- Assets/Content/GUI/controls/joystick_move/gui_joystick_guide.png
+- Assets/Content/GUI/controls/gui_ability_heal-assets/gui_ability_heal.png
+- Assets/Content/GUI/controls/Joy_control_back.png
+- Assets/Content/GUI/controls/gui_cancel_ability-assets/gui_hud_cancelability_hover.png
+- Assets/Content/GUI/screens/BattleScreen/Botton_right.png
+- Assets/Content/GUI/controls/button_ability/Animations/MiniJoystickAbilityButton.controller
+- Assets/Resources/UI/Screens/BattleScreen.prefab
+- Assets/Content/GUI/Fonts/HANDGOTN.TTF
+- Assets/Content/GUI/controls/button_ability/gui_btn_ability_normal.png
+- Assets/Content/GUI/controls/button_ability/Animations/MiniJoystickHide.anim
+- Assets/Resources/UI/Control/MiniJoystickButtonsPanel.prefab
+- Assets/Content/GUI/controls/gui_cancel_ability-assets/animations/CancelUseButton.controller
+- Assets/Content/GUI/controls/joystick_move/gui_joystick_nub.png
+- Assets/Resources/UI/3dUI/HeroUI.prefab
+- Assets/Content/GUI/controls/Joy_control.png
+- Assets/Content/GUI/controls/button_ability/gui_btn_ability_down.png
+- Assets/Resources/UI/3dUI/Icons/heal_button.png
+- Assets/Content/GUI/controls/button_attack/gui_btn_attack_normal.png
+- Assets/Content/GUI/controls/joystick_move/gui_joystick_underlay.png
+- Assets/Content/GUI/screens/BattleScreen/UP_left.png
+- Assets/Content/GUI/controls/button_ability/gui_joystick_ability_nub.png
+- Assets/Resources/UI/3dUI/Icons/meleedd_ab3.png
+- Assets/Content/GUI/controls/button_ability/gui_btn_ability_cooldown.png
+- Assets/Resources/UI/Control/MiniJoystickAbilityButton.prefab
+- Assets/Content/GUI/controls/gui_cancel_ability-assets/gui_hud_cancelability_normal.png
+- Assets/Content/GUI/controls/gui_ability_heal-assets/gui_ability_heal_disabled.png
+- Assets/Content/GUI/controls/button_ability/Animations/MiniJoystickShow.anim
+- Assets/Resources/UI/3dUI/Icons/meleedd_ab2.png
+- Assets/Content/GUI/controls/button_ability/gui_btn_ability_disabled.png
+- Assets/Resources/UI/3dUI/FlyOffText.prefab
+- Assets/Resources/UI/Control/AbilityButton.prefab
+- Assets/Resources/UI/HANDGOTN.TTF
+- Assets/Content/GUI/controls/button_ability/gui_joystick_ability_background.png
+- Assets/Content/GUI/controls/gui_cancel_ability-assets/animations/CancelUseShow.anim
+- Assets/Content/GUI/controls/gui_cancel_ability-assets/animations/CancelUseHide.anim
+Dependencies: []

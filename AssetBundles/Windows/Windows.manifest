@@ -1,0 +1,10 @@
+ManifestFileVersion: 0
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: scene_battlescene
+      Dependencies:
+        Dependency_0: gui
+    Info_1:
+      Name: gui
+      Dependencies: {}
